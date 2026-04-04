@@ -83,6 +83,36 @@ Open the application in your browser at http://127.0.0.1:8000.
 
 Check out the [Laravel Docs](https://laravel.com/docs) for more information.
 
+## Docker
+
+The repository now includes a Docker setup for:
+- Laravel app
+- MySQL 8
+- phpMyAdmin
+
+### Start the stack
+
+```bash
+docker compose up -d --build
+```
+
+Endpoints after startup:
+- Laravel: `http://localhost:8080`
+- phpMyAdmin: `http://localhost:8081`
+- MySQL from host: `127.0.0.1:3307`
+
+### Notes
+
+- The first MySQL startup imports the SQL dump defined by `DB_IMPORT_DUMP` in `.env`.
+- The Laravel container waits for MySQL, then runs `php artisan migrate --force`.
+- If you want to seed Laravel tables automatically, set `RUN_DB_SEED=true` in `.env`.
+- If you change `DB_IMPORT_DUMP` or need a fresh database import, reset volumes first:
+
+```bash
+docker compose down -v
+docker compose up -d --build
+```
+
 ## License
 This repo is under [MIT license](https://opensource.org/licenses/MIT).
 
