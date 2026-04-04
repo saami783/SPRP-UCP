@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 new
 #[Layout('layouts.update')]
-#[Title('View Update')]
+#[Title('Voir la mise à jour')]
 class extends Component {
 
     public $slug;
@@ -44,9 +44,9 @@ class extends Component {
 <div>
     <div class="bg-gray-800 p-5 rounded-lg border border-stroke-primary mt-5">
         <div class="space-y-3">
-            <span class="bg-[#83B41C]/25 font-ibm text-[#83B41C] font-bold tracking-widest text-xs rounded-full py-0.5 px-2">FEATURE OVERVIEW</span>
+            <span class="bg-[#83B41C]/25 font-ibm text-[#83B41C] font-bold tracking-widest text-xs rounded-full py-0.5 px-2">APERÇU DES FONCTIONNALITÉS</span>
             <h1 class="text-white text-2xl font-manrope">{{$update->title}}</h1>
-            <span class="text-[#666666] text-sm text-semibold">Written by {{$update->author}} · {{$update->created_at->diffForHumans()}}</span>
+            <span class="text-[#666666] text-sm text-semibold">Écrit par {{$update->author}} · {{$update->created_at->diffForHumans()}}</span>
         </div>
         @if($update->image)
             <img src="{{$update->image}}" alt="{{$update->title}}" class="w-full h-96 object-cover rounded-lg my-4">

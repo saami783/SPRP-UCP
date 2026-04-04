@@ -6,7 +6,7 @@ use App\Models\ReleaseNote;
 
 new
 #[Layout('layouts.update')]
-#[Title('Release Notes')]
+#[Title('Notes de mise à jour')]
 class extends Component {
 
     public $updates;

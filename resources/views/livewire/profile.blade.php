@@ -4,7 +4,7 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 
 new
-#[Title('Profile')]
+#[Title('Profil')]
 #[Layout('layouts.app')]
 class extends Component {
 
@@ -37,7 +37,7 @@ class extends Component {
             <h2 class="font-semibold text-2xl text-gray-200">
                 {{ __('My Account') }}
             </h2>
-            <p class="text-gray-400">Manage your account’s details.</p>
+            <p class="text-gray-400">Gérez les informations de votre compte.</p>
         </header>
 
         <div class="py-6">
@@ -54,12 +54,12 @@ class extends Component {
                         @if(Auth::user()->is_admin())
                             <div class="text-orange-400 inline-flex items-center space-x-1">
                                     <x-heroicon-m-shield-check class="h-4 w-4"/>
-                                    <span class="text-sm">Administrator</span>
+                                    <span class="text-sm">Administrateur</span>
                             </div>
                         @else
                             <div class="text-gray-400 inline-flex items-center space-x-1">
                                 <x-heroicon-m-check-badge class="h-4 w-4"/>
-                                <span class="text-sm">Player</span>
+                                <span class="text-sm">Joueur</span>
                             </div>
                         @endif
                     </div>
@@ -67,21 +67,21 @@ class extends Component {
                 <div
                     class="inline-flex items-center justify-center border-r border-stroke-primary bg-gray-900 py-2 md:py-0">
                     <div class="flex flex-col items-center justify-center">
-                        <span class="text-gray-200 font-semibold">{{$this->total_time_played ? : 'Unknown'}} Hours</span>
-                        <span class="text-gray-400 text-sm text-center">Total Time Played</span>
+                        <span class="text-gray-200 font-semibold">{{$this->total_time_played ? : 'Inconnu'}} heures</span>
+                        <span class="text-gray-400 text-sm text-center">Temps de jeu total</span>
                     </div>
                 </div>
                 <div
                     class="inline-flex items-center justify-center border-r border-stroke-primary bg-gray-900 py-2 md:py-0">
                     <div class="flex flex-col items-center justify-center">
-                        <span class="text-gray-200 font-semibold">{{$this->most_active_character ? : 'Unknown'}}</span>
-                        <span class="text-gray-400 text-sm text-center">Most Active Character</span>
+                        <span class="text-gray-200 font-semibold">{{$this->most_active_character ? : 'Inconnu'}}</span>
+                        <span class="text-gray-400 text-sm text-center">Personnage le plus joué</span>
                     </div>
                 </div>
                 <div class="inline-flex items-center justify-center bg-gray-900 py-2 md:py-0">
                     <div class="flex flex-col items-center justify-center">
-                        <span class="text-gray-200 font-semibold">{{$last_login ?  : 'Unknown'}}</span>
-                        <span class="text-gray-400 text-sm text-center">Last Login</span>
+                        <span class="text-gray-200 font-semibold">{{$last_login ?  : 'Inconnu'}}</span>
+                        <span class="text-gray-400 text-sm text-center">Dernière connexion</span>
                     </div>
                 </div>
             </div>

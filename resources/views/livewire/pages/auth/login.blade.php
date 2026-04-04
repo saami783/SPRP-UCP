@@ -49,7 +49,7 @@ new #[Layout('layouts.guest')] class extends Component
         <!-- Email Address -->
         <div>
             <x-input-label for="account_name" :value="__('Username')" />
-            <x-text-input wire:model="form.account_name" id="account_name" class="block mt-1 w-full" type="text" name="account_name" required autofocus autocomplete="username" placeholder="Username" />
+            <x-text-input wire:model="form.account_name" id="account_name" class="block mt-1 w-full" type="text" name="account_name" required autofocus autocomplete="username" placeholder="Nom d'utilisateur" />
             <x-input-error :messages="$errors->get('form.account_name')" class="mt-2" />
         </div>
 
@@ -68,7 +68,7 @@ new #[Layout('layouts.guest')] class extends Component
                             type="password"
                             name="account_password"
                             required autocomplete="current-password"
-                            placeholder="Password"
+                            placeholder="Mot de passe"
             />
 
             <x-input-error :messages="$errors->get('form.account_password')" class="mt-2" />

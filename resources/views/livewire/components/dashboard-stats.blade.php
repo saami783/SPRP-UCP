@@ -36,31 +36,31 @@ new class extends Component {
         $this->data = array(
             'online' => [
                 'count' => $this->online,
-                'label' => 'Online Players',
+                'label' => 'Joueurs en ligne',
                 'icon' => 'heroicon-s-users',
                 'live' => true,
             ],
             'registered' => [
                 'count' => $this->registered,
-                'label' => 'Registered Players',
+                'label' => 'Joueurs inscrits',
                 'icon' => 'heroicon-s-user-group',
                 'live' => false,
             ],
             'vehicles' => [
                 'count' => $this->vehicles,
-                'label' => 'Vehicles',
+                'label' => 'Véhicules',
                 'icon' => 'heroicon-s-truck',
                 'live' => false,
             ],
             'properties' => [
                 'count' => $this->properties,
-                'label' => 'Properties',
+                'label' => 'Propriétés',
                 'icon' => 'heroicon-s-home-modern',
                 'live' => false,
             ],
             'businesses' => [
                 'count' => $this->businesses,
-                'label' => 'Businesses',
+                'label' => 'Commerces',
                 'icon' => 'heroicon-s-building-storefront',
                 'live' => false,
             ],
