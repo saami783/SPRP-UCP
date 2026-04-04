@@ -10,6 +10,14 @@ class QuizQuestion extends Model
     use HasFactory;
 
     public $timestamps = false;
+    protected $fillable = [
+        'question',
+        'answer_1',
+        'answer_2',
+        'answer_3',
+        'answer_4',
+        'correct_answer',
+    ];
 
     public function answers()
     {

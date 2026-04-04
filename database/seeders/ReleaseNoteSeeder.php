@@ -14,6 +14,8 @@ class ReleaseNoteSeeder extends Seeder
      */
     public function run(): void
     {
+        ReleaseNote::query()->delete();
+
         ReleaseNote::factory()
             ->count(25)
             ->create();

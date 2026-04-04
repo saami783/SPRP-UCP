@@ -2709,8 +2709,11 @@ class SkinDataSeeder extends Seeder
 
         ];
 
-        // Insert the skin data
-        DB::table('skin_data')->insert($skins);
+        DB::table('skin_data')->upsert(
+            $skins,
+            ['skin_id'],
+            ['skin_model_name', 'name', 'gender', 'race', 'gang', 'usable']
+        );
 
     }
 }
