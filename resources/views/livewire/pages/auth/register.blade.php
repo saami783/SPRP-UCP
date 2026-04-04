@@ -47,15 +47,15 @@ new #[Layout('layouts.guest')] class extends Component
     <form wire:submit="register" class="mt-4 w-full">
         <!-- Name -->
         <div>
-            <x-input-label for="account_name" :value="__('Name')" />
-            <x-text-input wire:model="account_name" id="account_name" class="block mt-1 w-full" type="text" name="account_name" required autofocus autocomplete="account_name" placeholder="Enter your username" />
+            <x-input-label for="account_name" value="Nom d'utilisateur" />
+            <x-text-input wire:model="account_name" id="account_name" class="block mt-1 w-full" type="text" name="account_name" required autofocus autocomplete="account_name" placeholder="Saisissez votre nom d'utilisateur" />
             <x-input-error :messages="$errors->get('account_name')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="account_email" :value="__('Email')" />
-            <x-text-input wire:model="account_email" id="account_email" class="block mt-1 w-full" type="email" name="account_email" required autocomplete="username" placeholder="Enter your email address" />
+            <x-text-input wire:model="account_email" id="account_email" class="block mt-1 w-full" type="email" name="account_email" required autocomplete="username" placeholder="Saisissez votre adresse e-mail" />
             <x-input-error :messages="$errors->get('account_email')" class="mt-2" />
         </div>
 
@@ -66,7 +66,7 @@ new #[Layout('layouts.guest')] class extends Component
             <x-text-input wire:model="account_password" id="account_password" class="block mt-1 w-full"
                             type="password"
                             name="password"
-                            required autocomplete="new-password" placeholder="Enter your password" />
+                            required autocomplete="new-password" placeholder="Saisissez votre mot de passe" />
 
             <x-input-error :messages="$errors->get('account_password')" class="mt-2" />
         </div>
@@ -77,7 +77,7 @@ new #[Layout('layouts.guest')] class extends Component
 
             <x-text-input wire:model="account_password_confirmation" id="account_password_confirmation" class="block mt-1 w-full"
                             type="password"
-                            name="account_password_confirmation" required autocomplete="new-password" placeholder="Confirm your password" />
+                            name="account_password_confirmation" required autocomplete="new-password" placeholder="Confirmez votre mot de passe" />
 
             <x-input-error :messages="$errors->get('account_password_confirmation')" class="mt-2" />
         </div>

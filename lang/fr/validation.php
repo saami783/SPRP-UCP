@@ -1,0 +1,58 @@
+<?php
+
+return [
+    'accepted' => 'Le champ :attribute doit être accepté.',
+    'between' => [
+        'numeric' => 'Le champ :attribute doit être compris entre :min et :max.',
+        'string' => 'Le champ :attribute doit contenir entre :min et :max caractères.',
+    ],
+    'boolean' => 'Le champ :attribute doit être vrai ou faux.',
+    'confirmed' => 'La confirmation du champ :attribute ne correspond pas.',
+    'current_password' => 'Le mot de passe actuel est incorrect.',
+    'email' => 'Le champ :attribute doit être une adresse e-mail valide.',
+    'in' => 'La valeur sélectionnée pour le champ :attribute est invalide.',
+    'lowercase' => 'Le champ :attribute doit être en minuscules.',
+    'max' => [
+        'numeric' => 'Le champ :attribute ne peut pas être supérieur à :max.',
+        'string' => 'Le champ :attribute ne peut pas contenir plus de :max caractères.',
+    ],
+    'min' => [
+        'numeric' => 'Le champ :attribute doit être au moins de :min.',
+        'string' => 'Le champ :attribute doit contenir au moins :min caractères.',
+    ],
+    'numeric' => 'Le champ :attribute doit être un nombre.',
+    'password' => [
+        'letters' => 'Le champ :attribute doit contenir au moins une lettre.',
+        'mixed' => 'Le champ :attribute doit contenir au moins une lettre majuscule et une lettre minuscule.',
+        'numbers' => 'Le champ :attribute doit contenir au moins un chiffre.',
+        'symbols' => 'Le champ :attribute doit contenir au moins un symbole.',
+        'uncompromised' => 'Le champ :attribute fourni apparaît dans une fuite de données. Veuillez choisir un autre :attribute.',
+    ],
+    'regex' => 'Le format du champ :attribute est invalide.',
+    'required' => 'Le champ :attribute est obligatoire.',
+    'string' => 'Le champ :attribute doit être une chaîne de caractères.',
+    'unique' => 'La valeur du champ :attribute est déjà utilisée.',
+
+    'attributes' => [
+        'account_email' => 'adresse e-mail',
+        'account_name' => "nom d'utilisateur",
+        'account_password' => 'mot de passe',
+        'account_password_confirmation' => 'confirmation du mot de passe',
+        'character_age' => 'âge',
+        'character_body' => 'corpulence',
+        'character_eyes' => 'yeux',
+        'character_gender' => 'sexe',
+        'character_hair' => 'cheveux',
+        'character_height' => 'taille',
+        'character_race' => 'origine',
+        'current_password' => 'mot de passe actuel',
+        'email' => 'adresse e-mail',
+        'form.account_name' => "nom d'utilisateur",
+        'form.account_password' => 'mot de passe',
+        'name' => 'nom',
+        'password' => 'mot de passe',
+        'password_confirmation' => 'confirmation du mot de passe',
+        'player_name' => 'nom du personnage',
+        'selected_skin' => 'skin',
+    ],
+];

@@ -144,7 +144,7 @@ new class extends Component {
         $this->questions = $questions;
 
         if (!$this->questions)
-            throw new \Exception('No questions found');
+            throw new \Exception('Aucune question trouvée');
 
         $this->step = QuizSteps::QuizStepQuestions;
     }
@@ -202,22 +202,23 @@ new class extends Component {
             @case(QuizSteps::QuizStepStart)
                 @if($displayError)
                     <div>
-                        <h2 class="text-gray-100 text-2xl text-center font-bold mb-2">Try Again</h2>
-                        <p class="text-gray-400 mb-6">Sorry, but you have not answered enough questions correctly to
-                            proceed. Please try again.</p>
-                        <x-primary-button wire:click="resetQuiz" class="w-full">Try Again</x-primary-button>
+                        <h2 class="text-gray-100 text-2xl text-center font-bold mb-2">Réessayer</h2>
+                        <p class="text-gray-400 mb-6">Désolé, mais vous n'avez pas répondu correctement à un nombre
+                            suffisant de questions pour continuer. Veuillez réessayer.</p>
+                        <x-primary-button wire:click="resetQuiz" class="w-full">Réessayer</x-primary-button>
                     </div>
                     {{--<div class="w-full p-2 bg-red-500/10 rounded-lg mb-4 border border-red-500 text-red-400 font-semibold">
-                        Sorry, but you have not answered enough questions correctly to proceed. Please try again.
+                        Désolé, mais vous n'avez pas répondu correctement à un nombre suffisant de questions pour continuer. Veuillez réessayer.
                     </div>--}}
                 @else
                     <div>
-                        <h2 class="text-gray-100 text-2xl text-center font-bold mb-2">Finish Registration</h2>
-                        <p class="text-gray-400 mb-6">To finish registration, you have to complete a short quiz about
-                            your experience with roleplay servers. <br><br> This is so we can get a simple assessment of
-                            your skills and therefore be able to offer you a better, more streamlined experience. This
-                            process is automated and does not require human examination, so it will not take long.</p>
-                        <x-primary-button wire:click="startQuiz" class="w-full">Start Quiz</x-primary-button>
+                        <h2 class="text-gray-100 text-2xl text-center font-bold mb-2">Finaliser l'inscription</h2>
+                        <p class="text-gray-400 mb-6">Pour finaliser votre inscription, vous devez répondre à un court
+                            quiz sur votre expérience des serveurs roleplay. <br><br> Cela nous permet d'obtenir une
+                            évaluation simple de votre niveau et ainsi de vous proposer une expérience plus claire et
+                            plus fluide. Ce processus est automatisé et ne nécessite aucune vérification humaine, il ne
+                            prendra donc pas longtemps.</p>
+                        <x-primary-button wire:click="startQuiz" class="w-full">Commencer le quiz</x-primary-button>
                     </div>
                 @endif
                 @break
@@ -229,7 +230,7 @@ new class extends Component {
                             <span class="absolute mt-0.5 ml-2 text-lg text-[#6B6E7A] font-bold">/</span>
                             <span class="absolute mt-1 ml-4 text-lg text-[#6B6E7A] font-bold">2</span>
                         </div>
-                        <span class="text-gray-100 font-bold text-xl">Roleplay</span>
+                        <span class="text-gray-100 font-bold text-xl">Jeu de rôle</span>
                     </div>
                     <div>
                         @foreach($questions as $question)
@@ -260,10 +261,10 @@ new class extends Component {
                                                         </span>
                                             @endfor
                                         </div>
-                                        <span class="text-sm text-[#676974]">{{5 - $currentQuestion}} questions remaining</span>
+                                        <span class="text-sm text-[#676974]">Questions restantes : {{5 - $currentQuestion}}</span>
                                     </div>
 
-                                    <x-primary-button type="submit" class="w-fit">Next Step</x-primary-button>
+                                    <x-primary-button type="submit" class="w-fit">Étape suivante</x-primary-button>
                                 @endif
                             </form>
                         @endforeach
@@ -279,11 +280,11 @@ new class extends Component {
                             <span class="absolute mt-0.5 ml-3 text-lg text-[#6B6E7A] font-bold">/</span>
                             <span class="absolute mt-1 ml-5 text-lg text-[#6B6E7A] font-bold">2</span>
                         </div>
-                        <span class="text-gray-100 font-bold text-xl">English</span>
+                        <span class="text-gray-100 font-bold text-xl">Anglais</span>
                     </div>
                     <form class="flex flex-col space-y-4" wire:submit="submitEnglishQuestion">
                         <div class="flex flex-col">
-                            <h3 class="text-gray-100 font-semibold mb-3">Choose the correct sentence</h3>
+                            <h3 class="text-gray-100 font-semibold mb-3">Choisissez la phrase correcte.</h3>
                             <div class="flex items-center space-x-3 mb-2">
                                 <input type="radio" name="english_answer" id="english_answer-1" value="1"
                                        wire:model="englishAnswer" required
@@ -313,7 +314,7 @@ new class extends Component {
                                     with his friend.</label>
                             </div>
                         </div>
-                        <x-primary-button type="submit" class="w-fit">Next Step</x-primary-button>
+                        <x-primary-button type="submit" class="w-fit">Étape suivante</x-primary-button>
                     </form>
                 </div>
                 @break
@@ -327,50 +328,50 @@ new class extends Component {
                             <span class="absolute mt-0.5 ml-3 text-lg text-[#6B6E7A] font-bold">/</span>
                             <span class="absolute mt-1 ml-5 text-lg text-[#6B6E7A] font-bold">2</span>
                         </div>
-                        <span class="text-gray-100 font-bold text-xl">English</span>
+                        <span class="text-gray-100 font-bold text-xl">Anglais</span>
                     </div>
                     <form class="flex flex-col space-y-4" wire:submit="submitEnglishTest">
                         <div class="flex flex-col">
-                            <h3 class="text-gray-100 font-semibold mb-3">Write two /me commands that describes your character doing whatever actions you can think of.  You must write them grammatically correct and using proper punctuation. The actions do not have to be related to eachother.</h3>
-                            <textarea wire:model="englishTestAnswer1" name="englishTestAnswer1" placeholder="/me does something" required minlength="64" class="h-24 mb-1 bg-form-input py-2 text-gray-200 placeholder:text-form-placeholder border-form-stroke focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" data-gramm="false"
+                            <h3 class="text-gray-100 font-semibold mb-3">Écrivez deux commandes /me décrivant votre personnage en train d'effectuer les actions de votre choix. Vous devez les rédiger de manière grammaticalement correcte et avec une ponctuation appropriée. Les actions n'ont pas besoin d'être liées entre elles.</h3>
+                            <textarea wire:model="englishTestAnswer1" name="englishTestAnswer1" placeholder="/me fait quelque chose" required minlength="64" class="h-24 mb-1 bg-form-input py-2 text-gray-200 placeholder:text-form-placeholder border-form-stroke focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" data-gramm="false"
                                       data-gramm_editor="false"
                                       data-enable-grammarly="false"></textarea>
-                            <textarea wire:model="englishTestAnswer2" name="englishTestAnswer2" placeholder="/me does something" required minlength="64" class="h-24 mb-1 bg-form-input py-2 text-gray-200 placeholder:text-form-placeholder border-form-stroke focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                            <textarea wire:model="englishTestAnswer2" name="englishTestAnswer2" placeholder="/me fait quelque chose" required minlength="64" class="h-24 mb-1 bg-form-input py-2 text-gray-200 placeholder:text-form-placeholder border-form-stroke focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
                                       data-gramm="false"
                                       data-gramm_editor="false"
                                       data-enable-grammarly="false"></textarea>
-                            <span class="text-gray-500 text-sm">Minimum 64 characters (~10 words) per action.</span>
+                            <span class="text-gray-500 text-sm">Minimum 64 caractères (environ 10 mots) par action.</span>
                         </div>
-                        <x-primary-button type="submit" class="w-fit">Finish Quiz</x-primary-button>
+                        <x-primary-button type="submit" class="w-fit">Terminer le quiz</x-primary-button>
                     </form>
                 </div>
                 @break--}}
             @case(QuizSteps::QuizStepFinish)
                 <div>
-                    <h2 class="text-gray-100 text-2xl text-center font-bold mb-2">Congratulations!</h2>
-                    <p class="text-gray-400 mb-6">You have successfully passed the quiz. Your account now has full
-                        access to all features. Thank you for playing and have fun!</p>
-                    <x-primary-button wire:click="closeQuizModal" class="w-full">Thanks!</x-primary-button>
+                    <h2 class="text-gray-100 text-2xl text-center font-bold mb-2">Félicitations !</h2>
+                    <p class="text-gray-400 mb-6">Vous avez réussi le quiz. Votre compte dispose maintenant d'un accès
+                        complet à toutes les fonctionnalités. Merci d'avoir joué et amusez-vous bien !</p>
+                    <x-primary-button wire:click="closeQuizModal" class="w-full">Merci !</x-primary-button>
                 </div>
                 @break
             @case(QuizSteps::QuizStepCooldown)
                 <div wire:poll>
-                    <h2 class="text-gray-100 text-2xl text-center font-bold mb-2">Quiz Cooldown</h2>
-                    <p class="text-gray-400 mb-6">Sorry, but because you have failed multiple quizzes in a row, there
-                        has been a cooldown applied to your account.</p>
+                    <h2 class="text-gray-100 text-2xl text-center font-bold mb-2">Temps d'attente du quiz</h2>
+                    <p class="text-gray-400 mb-6">Désolé, mais comme vous avez échoué à plusieurs quiz d'affilée, un
+                        délai d'attente a été appliqué à votre compte.</p>
                     @if(auth()->user()->QuizCooldown < now())
-                        <x-primary-button wire:click="closeQuizModal" class="w-full">Try Again</x-primary-button>
+                        <x-primary-button wire:click="closeQuizModal" class="w-full">Réessayer</x-primary-button>
                     @else
-                        <p class="text-gray-400 mb-6">It will expire in {{auth()->user()->QuizCooldown->diffForHumans()}}</p>
+                        <p class="text-gray-400 mb-6">Le délai expirera dans {{auth()->user()->QuizCooldown->diffForHumans()}}</p>
                     @endif
                 </div>
                 @break
             @default
                 <div>
-                    <h2 class="text-gray-100 text-2xl text-center font-bold mb-2">Try Again</h2>
-                    <p class="text-gray-400 mb-6">Sorry, but you have not answered enough questions correctly to
-                        proceed. Please try again.</p>
-                    <x-primary-button wire:click="resetQuiz" class="w-full">Try Again</x-primary-button>
+                    <h2 class="text-gray-100 text-2xl text-center font-bold mb-2">Réessayer</h2>
+                    <p class="text-gray-400 mb-6">Désolé, mais vous n'avez pas répondu correctement à un nombre
+                        suffisant de questions pour continuer. Veuillez réessayer.</p>
+                    <x-primary-button wire:click="resetQuiz" class="w-full">Réessayer</x-primary-button>
                 </div>
                 @break
         @endswitch

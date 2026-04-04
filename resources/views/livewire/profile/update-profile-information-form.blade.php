@@ -75,7 +75,7 @@ new class extends Component
 
     <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
         <div>
-            <x-input-label for="account_name" :value="__('Name')" />
+            <x-input-label for="account_name" value="Nom d'utilisateur" />
             <x-text-input wire:model="account_name" id="account_name" name="account_name" type="text" class="mt-1 block w-full" required autofocus autocomplete="account_name" />
             <x-input-error class="mt-2" :messages="$errors->get('account_name')" />
         </div>

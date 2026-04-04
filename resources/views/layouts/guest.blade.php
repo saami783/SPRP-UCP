@@ -42,7 +42,7 @@
                         {{ $slot }}
                     </div>
                     <div class="hidden sm:flex flex-col justify-between items-center sm:col-span-2 rounded-r-lg overflow-clip bg-[#10050B]">
-                        <img class="w-full h-auto aspect-auto" src="{{asset('assets/backgrounds/auth.png')}}" alt="Illustration" />
+                        <img class="w-full h-auto aspect-auto" src="{{asset('assets/backgrounds/auth.png')}}" alt="Illustration d'authentification" />
                         <div class="w-full inline-flex space-x-4 items-center justify-center p-2">
                             <a href="#" class="text-[#404040] hover:text-[#595959] text-sm font-semibold inline-flex items-center space-x-1">
                                 <x-heroicon-o-globe-alt class="w-4 h-4" />
@@ -59,7 +59,7 @@
                 </div>
                 <div class="inline-flex w-full items-center justify-between text-[#4A4A4A] px-4 sm:px-0">
                     <p class="text-sm mt-4">
-                        &copy; 2024 {{ config('app.name', 'Laravel') }}. All rights reserved.
+                        &copy; 2024 {{ config('app.name', 'Laravel') }}. Tous droits réservés.
                     </p>
 
 

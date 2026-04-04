@@ -6,7 +6,7 @@ use App\Models\User;
 
 new
 #[Layout('layouts.app')]
-#[Title('Admin Record')]
+#[Title('Dossier administratif')]
 class extends Component {
 
     public $adminRecords;
@@ -45,7 +45,7 @@ class extends Component {
         $adminRecords = auth()->user()->adminRecords;
 
         foreach ($adminRecords as $record) {
-            $record->record_admin = User::find($record->record_admin)->account_name ?? 'Unknown';
+            $record->record_admin = User::find($record->record_admin)->account_name ?? 'Inconnu';
             $record->record_date = Carbon\Carbon::createFromFormat('d/m/Y, H:i', $record->record_date);
             $record->record_human_date = $record->record_date->shortRelativeDiffForHumans();
         }
@@ -76,7 +76,7 @@ class extends Component {
             <div>
                 <div class="space-y-2 mb-6">
                     @if(count($activeRecords) > 0)
-                        <p class="text-[#F79046] font-semibold">You currently have active punishments.</p>
+                        <p class="text-[#F79046] font-semibold">Vous avez actuellement des sanctions actives.</p>
                     @endif
                     @foreach($adminRecords as $record)
                        @if($record->active)
@@ -85,7 +85,7 @@ class extends Component {
                     @endforeach
                 </div>
                 <div>
-                    <p class="text-gray-500 font-medium mb-2">Previous Punishments <span class="text-gray-400">· {{count($adminRecords) - count($activeRecords) }}</span></p>
+                    <p class="text-gray-500 font-medium mb-2">Sanctions précédentes <span class="text-gray-400">· {{count($adminRecords) - count($activeRecords) }}</span></p>
                     <div class="space-y-2">
                         @foreach($adminRecords as $record)
                             @if(!$record->active)

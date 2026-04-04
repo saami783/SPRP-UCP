@@ -46,16 +46,16 @@ new class extends Component
                 <a href="samp://{{config('app.server_ip')}}:{{config('app.server_ip_port')}}" class="inline-flex items-center space-x-2">
                     @if($online != -1)
                         <div class="h-3 w-3 rounded-full bg-green-600"></div>
-                        <span class="text-green-600 font-semibold">{{$online}} Players Online</span>
+                        <span class="text-green-600 font-semibold">{{$online}} joueurs en ligne</span>
                     @else
                         <div class="h-3 w-3 rounded-full bg-red-600"></div>
-                        <span class="text-red-600 font-semibold">Server Offline</span>
+                        <span class="text-red-600 font-semibold">Serveur hors ligne</span>
                     @endif
                 </a>
                 <a href="samp://{{config('app.server_ip')}}:{{config('app.server_ip_port')}}" class="py-2 px-4 h-10 rounded-full inline-flex items-center justify-center bg-button-primary text-white font-semibold hover:bg-button-primary-hover transition">
-                   Play Now
+                   Jouer maintenant
                 </a>
-                <button title="Logout" wire:click="logout" class="text-start h-10 w-10 rounded-full inline-flex items-center justify-center bg-gray-800 hover:bg-gray-700 text-[#787878] hover:text-[#C2C2C2] transition">
+                <button title="Se déconnecter" wire:click="logout" class="text-start h-10 w-10 rounded-full inline-flex items-center justify-center bg-gray-800 hover:bg-gray-700 text-[#787878] hover:text-[#C2C2C2] transition">
                         <x-heroicon-m-arrow-right-start-on-rectangle class="h-6 w-6" />
                 </button>
             </div>
@@ -158,7 +158,7 @@ new class extends Component
         <div class="pt-4 pb-1 border-t border-gray-700">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-300" x-data="{{ json_encode(['name' => auth()->user()->account_name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
-                <div class="font-medium text-sm text-gray-400">Player</div>
+                <div class="font-medium text-sm text-gray-400">Joueur</div>
             </div>
 
             <div class="mt-3 space-y-1">

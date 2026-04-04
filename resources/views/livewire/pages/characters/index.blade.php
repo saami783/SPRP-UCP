@@ -6,7 +6,7 @@ use App\Models\ReleaseNote;
 
 new
 #[Layout('layouts.app')]
-#[Title('Characters')]
+#[Title('Personnages')]
 class extends Component {
 
     public $characters;

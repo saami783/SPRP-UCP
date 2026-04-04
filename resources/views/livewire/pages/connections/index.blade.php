@@ -4,7 +4,7 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 
 new
-#[Title('Connections')]
+#[Title('Connexions')]
 #[Layout('layouts.app')]
 class extends Component {
 
@@ -20,7 +20,7 @@ class extends Component {
             // Check if we already have the data so we don't have to spam the api
             if (isset($this->connection_data[$conn->e_session_ip])) {
 
-                if ($this->connection_data[$conn->e_session_ip]['location'] != 'Loading...')
+                if ($this->connection_data[$conn->e_session_ip]['location'] != 'Chargement...')
                     continue;
             }
 
@@ -29,7 +29,7 @@ class extends Component {
 
                 if (!$api_data || $api_data->status == 'fail') {
                     $this->connection_data[$conn->e_session_ip] = [
-                        'location' => 'Unknown Location',
+                        'location' => 'Localisation inconnue',
                         'picture' => 'assets/4x3-xx.svg',
                         'live' => false,
                     ];
@@ -45,7 +45,7 @@ class extends Component {
             } catch (\Exception $e) { // failed to get data, set this one to unknown
                 $api_data = null;
                 $this->connection_data[$conn->connection_ip] = [
-                    'location' => 'Unknown Location',
+                    'location' => 'Localisation inconnue',
                     'picture' => 'assets/4x3-xx.svg',
                     'live' => false,
                 ];
@@ -57,7 +57,7 @@ class extends Component {
     {
         // check if connection is within  the last minute
         if ($connection_timestamp > now()->subMinute()->timestamp) {
-            return 'Just now';
+            return "À l'instant";
         } else {
             return \Carbon\Carbon::createFromTimestamp($connection_timestamp)->diffForHumans();
         }
@@ -70,7 +70,7 @@ class extends Component {
 
         foreach ($this->connections as $connection) {
             $this->connection_data[$connection->e_session_ip] = [
-                'location' => 'Loading...',
+                'location' => 'Chargement...',
                 'picture' => 'assets/4x3-xx.svg',
                 'live' => false,
             ];
@@ -87,18 +87,18 @@ class extends Component {
         <div class="w-full md:w-2/3 lg:w-1/2 space-y-4" x-data="{ showIp: false }">
             <div class="inline-flex w-full justify-between">
                 <h1 class="text-2xl font-bold text-gray-200">{{ __('Connections') }}</h1>
-                <label class="inline-flex items-center cursor-pointer" x-tooltip="tooltip" x-data="{ tooltip: 'Warning! This may show your general location. Make sure your screen isn\'t visible to others.' }">
+                <label class="inline-flex items-center cursor-pointer" x-tooltip="tooltip" x-data="{ tooltip: 'Attention ! Cela peut afficher votre localisation générale. Assurez-vous que votre écran n\\'est pas visible par d\\'autres personnes.' }">
                     <input @click="showIp = !showIp" type="checkbox" value="" class="sr-only peer">
                     <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Show Locations?</span>
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Afficher les localisations ?</span>
                 </label>
             </div>
-            <div class="grid grid-cols-1 gap-3" x-data="{ safety: 'For safety, this field is hidden unless you enable it above.' }">
+            <div class="grid grid-cols-1 gap-3" x-data="{ safety: 'Par sécurité, ce champ est masqué tant que vous ne l\\'activez pas ci-dessus.' }">
 
                 @foreach($connections as $connection)
                     @if($connection_data[$connection->e_session_ip]['live'])
                         <div class="rounded-lg inline-flex items-start">
-                            LIVE MF
+                            EN DIRECT
                             <div class="w-14 h-14 rounded-l-lg bg-container-light inline-flex items-center justify-center">
                                 <x-heroicon-o-server-stack class="w-6 h-6 text-[#4D71D0]" />
                             </div>
@@ -106,7 +106,7 @@ class extends Component {
                                 <div class="inline-flex items-center">
                                     <div wire:init="getConnectionData" class="mr-2">
                                         <template x-if="!showIp">
-                                            <span class="text-white font-semibold">Hidden Location</span>
+                                            <span class="text-white font-semibold">Localisation masquée</span>
                                         </template>
                                         <div class="h-8 w-fit inline-flex items-center" x-show="showIp">
                                             <img class="rounded-sm mr-2" src="{{ asset(strtolower($connection_data[$connection->e_session_ip]['picture']))}}" width="16"/>
@@ -116,7 +116,7 @@ class extends Component {
                                     <span class="text-gray-400 text-sm mr-2">·</span>
                                     <span class="text-gray-400 text-sm">{{$this->getConnectionTime($connection->e_session_unix_store)}}</span>
                                 </div>
-                                <span class="text-gray-600 text-sm font-semibold">{{$connection->e_session_web ? 'UCP Connection' : 'In-Game Connection'}}</span>
+                                <span class="text-gray-600 text-sm font-semibold">{{$connection->e_session_web ? 'Connexion UCP' : 'Connexion en jeu'}}</span>
                             </div>
                         </div>
                     @else
@@ -147,7 +147,7 @@ class extends Component {
                             <div class="inline-flex items-center">
                                 <div wire:init="getConnectionData" class="mr-2">
                                     <template x-if="!showIp">
-                                        <span class="text-white font-semibold">Hidden Location</span>
+                                        <span class="text-white font-semibold">Localisation masquée</span>
                                     </template>
                                     <div class="h-8 w-fit inline-flex items-center" x-show="showIp">
                                         <img class="rounded-sm mr-2" src="{{ asset(strtolower($connection_data[$connection->e_session_ip]['picture']))}}" width="16"/>
@@ -157,16 +157,16 @@ class extends Component {
                                 <span class="text-gray-400 text-sm mr-2">·</span>
                                 <span class="text-gray-400 text-sm">{{$this->getConnectionTime($connection->e_session_unix_store)}}</span>
                             </div>
-                            <span class="text-gray-600 text-sm font-semibold">{{$connection->e_session_web ? 'UCP Connection' : 'In-Game Connection'}}</span>
+                            <span class="text-gray-600 text-sm font-semibold">{{$connection->e_session_web ? 'Connexion UCP' : 'Connexion en jeu'}}</span>
                         </div>
                     </div>
                     @empty
-                    <p class="w-full text-gray-600">No connections for this account found.</p>
+                    <p class="w-full text-gray-600">Aucune connexion trouvée pour ce compte.</p>
                 @endforelse
             </div>
             @if($connections->count() > 0)
                 <div class="w-full">
-                    <p class="text-right w-full text-gray-600 text-sm">Showing your last 10 connections</p>
+                    <p class="text-right w-full text-gray-600 text-sm">Affichage de vos 10 dernières connexions</p>
                 </div>
                 <div class="mt-2">
                     <h2 class="text-lg font-medium text-gray-200">
