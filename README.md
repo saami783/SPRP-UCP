@@ -106,6 +106,8 @@ Endpoints after startup:
 - The first MySQL startup imports the SQL dump defined by `DB_IMPORT_DUMP` in `.env`.
 - The Laravel container waits for MySQL, then runs `php artisan migrate --force`.
 - If you want to seed Laravel tables automatically, set `RUN_DB_SEED=true` in `.env`.
+- In local development, `docker-compose.override.yml` bind-mounts the Laravel source directories into the app container, so Blade/PHP changes are visible on refresh without rebuilding the image.
+- If you change frontend files in `resources/css` or `resources/js`, run `npm run dev` on the host.
 - If you change `DB_IMPORT_DUMP` or need a fresh database import, reset volumes first:
 
 ```bash
