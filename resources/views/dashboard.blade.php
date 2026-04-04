@@ -15,7 +15,7 @@
                 <x-heroicon-m-play class="w-6 h-6 mr-2"/>
                 Jouer maintenant <span class="md:hidden ml-1">(PC uniquement)</span>
             </x-primary-interactive-button>
-            <x-secondary-interactive-button href="https://www.sa-mp.mp/downloads/" class="w-full sm:w-fit">
+            <x-secondary-interactive-button href="https://www.sa-mp.mp/downloads/" target="_blank" class="w-full sm:w-fit">
                 <img src="{{asset('assets/logos/samp.jpg')}}" class="w-6 h-6 mr-2" alt="Icône GTA San Andreas Multiplayer"/>
                 Télécharger SA:MP
             </x-secondary-interactive-button>
