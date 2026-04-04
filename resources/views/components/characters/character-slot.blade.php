@@ -8,7 +8,7 @@
         </a>
         @break
     @case(false)
-        <a href="#" class="w-full group uses_character_bg rounded-lg py-8 space-y-4 hover:character_slot_effect hover:ring ring-white/10 transition">
+        <a href="{{ route('characters.show', ['characterName' => $character->player_name]) }}" class="w-full group uses_character_bg rounded-lg py-8 space-y-4 hover:character_slot_effect hover:ring ring-white/10 transition" wire:navigate>
             <img src="{{ asset('assets/skins/'.$character->player_skinid.'.png') }}" alt="Aperçu du personnage" class="w-full h-auto">
             <div class="flex flex-col items-center">
                 <div class="inline-flex items-center space-x-2">

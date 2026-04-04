@@ -28,7 +28,9 @@ Volt::route('/characters', 'pages.characters.index')
     ->name('characters');
 
 Volt::route('/characters/create', 'pages.characters.create')->name('characters.create');
-//Volt::route('/characters/{}', 'pages.release-notes.view')->name('update.view');
+Volt::route('/characters/{characterName}', 'pages.characters.show')
+    ->middleware(['auth', 'verified'])
+    ->name('characters.show');
 
 Route::get('dashboard', [IndexController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])

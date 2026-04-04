@@ -2,7 +2,6 @@
 
 use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
-use App\Models\ReleaseNote;
 
 new
 #[Layout('layouts.app')]
