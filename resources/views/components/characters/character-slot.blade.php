@@ -15,7 +15,7 @@
                     <span class="font-semibold text-gray-300 text-lg group-hover:text-gray-100 transition">{{$character->getCleanName()}}</span>
                     <x-heroicon-m-arrow-top-right-on-square class="w-4 h-4 text-gray-300 group-hover:text-gray-100 transition" />
                 </div>
-                <span class="text-gray-400 group-hover:text-gray-300 transition text-sm">Niveau 84 · LSPD</span>
+                <span class="text-gray-400 group-hover:text-gray-300 transition text-sm">Niveau {{$character->player_level}} · {{ number_format((int) $character->player_hours, 0, ',', ' ') }}h</span>
             </div>
         </a>
 
