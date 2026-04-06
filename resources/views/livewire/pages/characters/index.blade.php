@@ -40,6 +40,7 @@ class extends Component {
                     @endfor
 
                 </div>
+                {{--
                 <div>
                     <h2 class="text-lg font-medium text-gray-200">
                         {{ __('Need another character?') }}
@@ -56,6 +57,7 @@ class extends Component {
                         </span>
                     </x-primary-interactive-button>
                 </div>
+                --}}
             </div>
         </div>
 </div>
