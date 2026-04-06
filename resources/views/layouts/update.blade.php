@@ -54,7 +54,7 @@
             <div class="max-w-2xl mx-auto w-full text-[#4A4A4A] px-2 lg:px-0 pb-4">
                 <div class="inline-flex items-center justify-between w-full">
                     <p class="text-sm mt-4">
-                        &copy; 2024 {{ config('app.name', 'Laravel') }}. Tous droits réservés.
+                        &copy; 2026 Street of Los Santos Roleplay France. Tous droits réservés.
                     </p>
                     <p class="text-sm mt-4">
                         Version {{ config('app.version', '') }}
