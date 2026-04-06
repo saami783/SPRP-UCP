@@ -91,7 +91,9 @@ class extends Component {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="flex flex-col space-y-8">
                     <livewire:profile.update-profile-information-form/>
+                    {{--
                     <livewire:profile.link-discord-account/>
+                    --}}
                 </div>
                 <div>
                     <livewire:profile.update-password-form/>

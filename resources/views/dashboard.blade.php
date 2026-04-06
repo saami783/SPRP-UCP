@@ -28,7 +28,7 @@
                 <h2 class="text-lg font-medium text-gray-400">
                     {{ __('Discord') }}
                 </h2>
-                <a target="_blank" href="{{config('app.discord_url') ?? ''}}" class="w-full p-3 bg-[#404EED] rounded-lg inline-flex items-center space-x-2 mt-4">
+                <a target="_blank" href="https://discord.gg/TSNSkMfJCv" class="w-full p-3 bg-[#404EED] rounded-lg inline-flex items-center space-x-2 mt-4">
                     <img src="{{ asset('assets/logos/discord.svg') }}" alt="Discord Logo" class="h-12 w-12">
                     <span class="text-gray-200 font-semibold">Rejoindre notre serveur Discord</span>
                 </a>
