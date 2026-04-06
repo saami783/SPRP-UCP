@@ -8,7 +8,7 @@ use Livewire\WithPagination;
 
 new
 #[Layout('layouts.app')]
-#[Title('Dossier administratif')]
+#[Title('Sanctions OOC')]
 class extends Component {
     use WithPagination;
 

@@ -13,7 +13,7 @@
         <meta name="msapplication-TileColor" content="#2b5797">
         <meta name="theme-color" content="#1E1F22">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ $title ?? config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
