@@ -23,15 +23,7 @@ class extends Component {
     public $weapons;
     public $drugs;
 
-    public array $overviewStats = [];
-    public array $profileDetails = [];
-    public array $appearanceDetails = [];
-    public array $factionDetails = [];
-    public array $financeDetails = [];
-    public array $communicationDetails = [];
-    public array $equipmentDetails = [];
-    public array $fitnessDetails = [];
-    public array $weaponSkills = [];
+    public string $activeTab = 'proprietes';
 
     public int $healthPercent = 0;
     public int $armourPercent = 0;
@@ -128,108 +120,6 @@ class extends Component {
         $this->healthPercent = $this->clampPercentage($this->character->player_health);
         $this->armourPercent = $this->clampPercentage($this->character->player_armour);
 
-        $propertyCount = $this->ownedProperties->count() + ($this->rentedProperty ? 1 : 0);
-
-        $this->overviewStats = [
-            ['label' => 'Cash', 'value' => $this->formatMoney($this->character->player_cash)],
-            ['label' => 'Banque', 'value' => $this->formatMoney($this->character->player_bankcash)],
-            ['label' => 'Véhicules', 'value' => $this->vehicles->count()],
-            ['label' => 'Propriétés', 'value' => $propertyCount],
-            ['label' => 'Armes', 'value' => $this->weapons->count()],
-            ['label' => 'Drogues', 'value' => $this->drugs->count()],
-        ];
-
-        $this->profileDetails = [
-            ['label' => 'Compte', 'value' => $this->character->user?->account_name ?? 'Inconnu'],
-            ['label' => 'ID personnage', 'value' => '#'.$this->character->player_id],
-            ['label' => 'ID compte', 'value' => '#'.$this->character->account_id],
-            ['label' => 'Unique ID', 'value' => $this->cleanText($this->character->player_uniqueid, 'Non défini')],
-            ['label' => 'Inscrit le', 'value' => $this->formatTimestamp($this->character->player_registerdate)],
-            ['label' => 'Dernière connexion', 'value' => $this->formatTimestamp($this->character->player_logindate)],
-            ['label' => 'Skin', 'value' => $this->skinLabel()],
-            ['label' => 'Skins sauvegardés', 'value' => $this->skinCount],
-            ['label' => 'Tenues vestiaire', 'value' => $this->wardrobeCount],
-        ];
-
-        $this->appearanceDetails = [
-            ['label' => 'Sexe', 'value' => $this->genderLabel($this->character->player_attribute_sex)],
-            ['label' => 'Âge', 'value' => $this->character->player_attribute_age > 0 ? $this->character->player_attribute_age.' ans' : 'Inconnu'],
-            ['label' => 'Origine', 'value' => $this->raceLabel($this->character->player_attribute_race)],
-            ['label' => 'Taille', 'value' => $this->heightLabel($this->character->player_attribute_height)],
-            ['label' => 'Corpulence', 'value' => $this->bodyLabel($this->character->player_attribute_body)],
-            ['label' => 'Cheveux', 'value' => $this->hairLabel($this->character->player_attribute_hair)],
-            ['label' => 'Yeux', 'value' => $this->eyesLabel($this->character->player_attribute_eyes)],
-            ['label' => 'Props attachés', 'value' => $this->propCount],
-        ];
-
-        $this->factionDetails = [
-            ['label' => 'Faction', 'value' => $this->faction?->faction_name ?? 'Aucune'],
-            ['label' => 'Abréviation', 'value' => $this->faction?->faction_abbrev ?? 'Aucune'],
-            ['label' => 'Rang', 'value' => $this->cleanText($this->character->player_factionrank, 'Aucun')],
-            ['label' => 'Tier', 'value' => $this->character->player_factionid > 0 ? $this->character->player_factiontier : 'Aucun'],
-            ['label' => 'Badge', 'value' => $this->character->player_factionbadge > 0 ? '#'.$this->character->player_factionbadge : 'Aucun'],
-            ['label' => 'Escouades', 'value' => $this->squadLabel()],
-            ['label' => 'Suspension', 'value' => $this->character->player_factionsuspension > 0 ? $this->character->player_factionsuspension : 'Aucune'],
-            ['label' => 'Spawn propriété', 'value' => $this->character->player_spawnproperty > 0 ? '#'.$this->character->player_spawnproperty : 'Aucun'],
-        ];
-
-        $this->financeDetails = [
-            ['label' => 'Cash', 'value' => $this->formatMoney($this->character->player_cash)],
-            ['label' => 'Banque', 'value' => $this->formatMoney($this->character->player_bankcash)],
-            ['label' => 'Épargne', 'value' => $this->formatMoney($this->character->player_savings)],
-            ['label' => 'Paie', 'value' => $this->formatMoney($this->character->player_paycheck)],
-            ['label' => 'Amendes', 'value' => $this->formatMoney($this->character->player_outstanding_fines)],
-            ['label' => 'Respect', 'value' => number_format((int) $this->character->player_respect, 0, ',', ' ')],
-            ['label' => 'Fear', 'value' => number_format((int) $this->character->player_fear, 0, ',', ' ')],
-            ['label' => 'Remboursement MAJ', 'value' => $this->formatMoney($this->character->player_update_reward)],
-        ];
-
-        $this->communicationDetails = [
-            ['label' => 'Numéro', 'value' => $this->character->player_phnumber > 0 ? $this->character->player_phnumber : 'Aucun'],
-            ['label' => 'Crédit', 'value' => $this->formatMoney($this->character->player_phcredit)],
-            ['label' => 'Batterie', 'value' => $this->clampPercentage($this->character->player_phbattery).'%'],
-            ['label' => 'Radio', 'value' => $this->yesNo($this->character->player_radio > 0)],
-            ['label' => 'Canal 1', 'value' => $this->channelLabel($this->character->player_radiochan1)],
-            ['label' => 'Canal 2', 'value' => $this->channelLabel($this->character->player_radiochan2)],
-            ['label' => 'Canal 3', 'value' => $this->channelLabel($this->character->player_radiochan3)],
-            ['label' => 'Pager', 'value' => $this->channelLabel($this->character->player_pager_freq)],
-        ];
-
-        $this->equipmentDetails = [
-            ['label' => 'Masque', 'value' => $this->yesNo($this->character->player_maskid > 0)],
-            ['label' => 'Jerry can', 'value' => $this->yesNo($this->character->player_gascan > 0)],
-            ['label' => 'Lockpicks', 'value' => number_format((int) $this->character->player_lockpicks, 0, ',', ' ')],
-            ['label' => 'Permis de conduire', 'value' => $this->yesNo($this->character->player_driverslicense > 0)],
-            ['label' => 'Avertissements route', 'value' => number_format((int) $this->character->player_driver_warnings, 0, ',', ' ')],
-            ['label' => "Permis d'armes", 'value' => $this->yesNo($this->character->player_gunlicense > 0)],
-            ['label' => 'Clé de véhicule', 'value' => $this->character->player_carkey >= 0 ? '#'.$this->character->player_carkey : 'Aucune'],
-            ['label' => 'Location active', 'value' => $this->rentedProperty ? '#'.$this->rentedProperty->property_id : 'Aucune'],
-        ];
-
-        $this->fitnessDetails = [
-            ['label' => 'Santé', 'value' => number_format((float) $this->character->player_health, 0, ',', ' ').'%'],
-            ['label' => 'Armure', 'value' => number_format((float) $this->character->player_armour, 0, ',', ' ').'%'],
-            ['label' => 'Graisse', 'value' => number_format((float) $this->character->player_fat, 0, ',', ' ')],
-            ['label' => 'Muscle', 'value' => number_format((float) $this->character->player_muscle, 0, ',', ' ')],
-            ['label' => 'Endurance', 'value' => number_format((float) $this->character->player_stamina, 0, ',', ' ')],
-            ['label' => 'Faim', 'value' => number_format((int) $this->character->player_gym_hunger, 0, ',', ' ')],
-            ['label' => 'Soif', 'value' => number_format((int) $this->character->player_gym_thirst, 0, ',', ' ')],
-            ['label' => 'Style de combat', 'value' => $this->fightStyleLabel($this->character->player_fightstyle)],
-        ];
-
-        $this->weaponSkills = [
-            ['label' => 'Pistol', 'value' => $this->character->player_skill_pistol],
-            ['label' => 'Silenced', 'value' => $this->character->player_skill_sdpistol],
-            ['label' => 'Desert Eagle', 'value' => $this->character->player_skill_deagle],
-            ['label' => 'Shotgun', 'value' => $this->character->player_skill_shotgun],
-            ['label' => 'Sawnoff', 'value' => $this->character->player_skill_sawnoff],
-            ['label' => 'SPAS-12', 'value' => $this->character->player_skill_spaz],
-            ['label' => 'Uzi', 'value' => $this->character->player_skill_uzi],
-            ['label' => 'MP5', 'value' => $this->character->player_skill_mp5],
-            ['label' => 'AK-47', 'value' => $this->character->player_skill_ak47],
-            ['label' => 'M4', 'value' => $this->character->player_skill_m4],
-            ['label' => 'Sniper', 'value' => $this->character->player_skill_sniper],
-        ];
     }
 
     public function loadWeapons()
@@ -460,341 +350,192 @@ class extends Component {
 
 }; ?>
 
-<div>
-    <div class="w-full inline-flex items-start justify-center p-6 space-x-4">
-        <a href="{{ route('characters') }}" class="hidden h-10 w-10 rounded-full bg-[#2D2F34] p-2 text-gray-500 transition hover:text-gray-400 md:block" wire:navigate>
-            <x-heroicon-c-arrow-left-circle class="h-6 w-6" />
-        </a>
+<div class="px-4 py-5 md:px-6 md:py-8 xl:px-8">
+    @php
+        $totalLiquidAssets = $character->player_cash + $character->player_bankcash + $character->player_savings;
+        $propertyCount = $ownedProperties->count() + ($rentedProperty ? 1 : 0);
+        $assetCount = $vehicles->count() + $propertyCount;
+        $inventoryCount = $weapons->count() + $drugs->count();
+        $factionSummary = $faction
+            ? $faction->faction_name.' · '.$this->cleanText($character->player_factionrank, 'Aucun rang')
+            : 'Sans faction';
+        $heroStats = [
+            [
+                'label' => 'Liquidités',
+                'value' => $this->formatMoney($totalLiquidAssets),
+                'hint' => 'Cash, banque et épargne',
+            ],
+            [
+                'label' => 'Possessions',
+                'value' => $assetCount,
+                'hint' => $vehicles->count().' véhicules · '.$propertyCount.' biens',
+            ],
+            [
+                'label' => 'Inventaire',
+                'value' => $inventoryCount,
+                'hint' => $weapons->count().' armes · '.$drugs->count().' substances',
+            ],
+            [
+                'label' => 'Téléphone',
+                'value' => $character->player_phnumber > 0 ? $character->player_phnumber : 'Aucun',
+                'hint' => $character->player_radio > 0 ? 'Radio active' : 'Pas de radio',
+            ],
+        ];
 
-        <div class="w-full xl:w-5/6 space-y-6">
-            <section class="overflow-hidden rounded-2xl border border-stroke-primary bg-[#232429]">
-                <div class="grid grid-cols-1 xl:grid-cols-12">
-                    <div class="uses_character_bg border-b border-white/10 p-6 xl:col-span-4 xl:border-b-0 xl:border-r">
-                        <p class="text-[11px] font-medium uppercase tracking-[0.28em] text-gray-500">Profil personnage</p>
+        $tabs = [
+            ['id' => 'proprietes', 'label' => 'Propriétés'],
+            ['id' => 'vehicules', 'label' => 'Véhicules'],
+        ];
+    @endphp
 
-                        <div class="mt-3 flex flex-wrap items-start justify-between gap-3">
-                            <div>
-                                <h1 class="text-3xl font-bold text-gray-100">{{ $character->getCleanName() }}</h1>
-                                <p class="mt-2 text-sm text-gray-400">{{ $this->skinLabel() }}</p>
+    <div class="mx-auto flex w-full max-w-[1440px] flex-col gap-8">
+        <div class="flex flex-wrap items-center gap-4">
+            <a
+                href="{{ route('characters') }}"
+                class="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-gray-300 transition hover:border-white/20 hover:text-white"
+                wire:navigate
+            >
+                <x-heroicon-c-arrow-left-circle class="h-5 w-5" />
+                <span>Retour aux personnages</span>
+            </a>
+        </div>
+
+        <section class="relative overflow-hidden rounded-[2rem] shadow-[0_45px_120px_rgba(0,0,0,0.28)]">
+            <div class="grid gap-6 p-5 sm:p-6 xl:grid-cols-[minmax(0,1.25fr)_360px] xl:p-8">
+                <div class="space-y-6">
+                    <div class="flex flex-wrap items-start justify-between gap-6">
+                        <div class="max-w-3xl space-y-4">
+                            <div class="space-y-2">
+                                <h1 class="font-manrope text-4xl font-extrabold leading-none tracking-[-0.04em] text-white sm:text-5xl xl:text-6xl">
+                                    {{ $character->getCleanName() }}
+                                </h1>
+                                <p class="text-sm text-slate-400">{{ $factionSummary }}</p>
                             </div>
 
-                            <div class="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs font-medium text-gray-300">
-                                Niveau {{ $character->player_level }} · {{ number_format((int) $character->player_hours, 0, ',', ' ') }}h
-                            </div>
                         </div>
 
-                        <div class="mt-6 flex flex-wrap gap-2">
-                            <span class="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-gray-300">
-                                {{ $faction?->faction_name ?? 'Sans faction' }}
+                        <div class="flex flex-wrap gap-2">
+                            <span class="inline-flex items-center rounded-full border border-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-white">
+                                Niveau {{ $character->player_level }}
                             </span>
-                            <span class="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-gray-300">
-                                Compte {{ $character->user?->account_name ?? 'Inconnu' }}
+                            <span class="inline-flex items-center rounded-full border border-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-slate-200">
+                                {{ number_format((int) $character->player_hours, 0, ',', ' ') }}h jouées
                             </span>
                         </div>
+                    </div>
 
-                        <img src="{{ asset('assets/skins/'.$character->player_skinid.'.png') }}" alt="Aperçu du personnage" class="mx-auto mt-6 w-full max-w-sm">
+                    <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                        @foreach($heroStats as $stat)
+                            <article class="rounded-[1.75rem] border border-white/10 p-5 transition duration-300 hover:-translate-y-1">
+                                <div>
+                                    <p class="text-[11px] uppercase tracking-[0.26em] text-slate-500">{{ $stat['label'] }}</p>
+                                    <p class="mt-4 font-manrope text-2xl font-extrabold tracking-tight text-white">{{ $stat['value'] }}</p>
+                                    <p class="mt-2 text-xs leading-5 text-slate-400">{{ $stat['hint'] }}</p>
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <nav class="inline-flex w-fit gap-2 rounded-[1.25rem] border border-white/10 p-1.5">
+                            @foreach($tabs as $tab)
+                                <button
+                                    type="button"
+                                    wire:click="$set('activeTab', '{{ $tab['id'] }}')"
+                                    class="{{ $activeTab === $tab['id'] ? 'border-button-primary bg-button-primary text-white' : 'border-transparent text-slate-300 hover:border-white/10 hover:text-white' }} whitespace-nowrap rounded-full border px-3.5 py-2 text-sm font-medium transition"
+                                >
+                                    {{ $tab['label'] }}
+                                </button>
+                            @endforeach
+                        </nav>
+                    </div>
+
+                    <div class="space-y-3">
+                        @if($activeTab === 'proprietes')
+                            <ul class="list-disc space-y-2 pl-5 text-sm text-slate-300 marker:text-slate-500">
+                            @if($rentedProperty)
+                                <li>
+                                    <span class="font-medium text-white">{{ $rentedProperty->property_name }}</span>
+                                    <span class="text-slate-400"> · location actuelle · {{ $this->propertyTypeLabel($rentedProperty->property_type) }}</span>
+                                </li>
+                            @endif
+
+                            @forelse($ownedProperties as $property)
+                                <li>
+                                    <span class="font-medium text-white">{{ $property->property_name }}</span>
+                                    <span class="text-slate-400"> · {{ $this->propertyTypeLabel($property->property_type) }}</span>
+                                </li>
+                            @empty
+                                @if(!$rentedProperty)
+                                    <p class="text-sm text-slate-400">Ce personnage ne possède ni ne loue aucune propriété.</p>
+                                @endif
+                            @endforelse
+                            </ul>
+                        @endif
+
+                        @if($activeTab === 'vehicules')
+                            <ul class="list-disc space-y-2 pl-5 text-sm text-slate-300 marker:text-slate-500">
+                            @forelse($vehicles as $vehicle)
+                                <li>
+                                    <span class="font-medium text-white">{{ $vehicle->vehicle_license }}</span>
+                                    <span class="text-slate-400"> · modèle #{{ $vehicle->vehicle_modelid }}</span>
+                                    <span class="{{ $vehicle->vehicle_impounded ? 'text-rose-200' : 'text-slate-400' }}"> · {{ $vehicle->vehicle_impounded ? 'En fourrière' : 'Disponible' }}</span>
+                                </li>
+                            @empty
+                                <p class="text-sm text-slate-400">Ce personnage ne possède actuellement aucun véhicule.</p>
+                            @endforelse
+                            </ul>
+                        @endif
+                    </div>
+                </div>
+
+                <aside class="rounded-[2rem] p-4">
+                    <div class="rounded-[1.6rem] border border-white/10 px-4 pb-4 pt-5">
+                        <div class="flex items-center">
+                            <span class="inline-flex items-center rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-slate-200">
+                                {{ $this->skinLabel() }}
+                            </span>
+                        </div>
 
                         <div class="mt-6 space-y-4">
                             <div>
-                                <div class="flex items-center justify-between text-sm">
-                                    <span class="text-gray-400">Santé</span>
-                                    <span class="font-medium text-gray-200">{{ number_format((float) $character->player_health, 0, ',', ' ') }}%</span>
+                                <div class="flex items-center justify-between text-xs text-slate-400">
+                                    <span>Santé</span>
+                                    <span>{{ number_format((float) $character->player_health, 0, ',', ' ') }}%</span>
                                 </div>
-                                <div class="mt-2 h-2 rounded-full bg-black/30">
-                                    <div class="h-2 rounded-full bg-emerald-400" style="width: {{ $healthPercent }}%"></div>
+                                <div class="mt-2 h-2 rounded-full border border-white/10">
+                                    <div class="h-2 rounded-full bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500" style="width: {{ $healthPercent }}%"></div>
                                 </div>
                             </div>
 
                             <div>
-                                <div class="flex items-center justify-between text-sm">
-                                    <span class="text-gray-400">Armure</span>
-                                    <span class="font-medium text-gray-200">{{ number_format((float) $character->player_armour, 0, ',', ' ') }}%</span>
+                                <div class="flex items-center justify-between text-xs text-slate-400">
+                                    <span>Armure</span>
+                                    <span>{{ number_format((float) $character->player_armour, 0, ',', ' ') }}%</span>
                                 </div>
-                                <div class="mt-2 h-2 rounded-full bg-black/30">
-                                    <div class="h-2 rounded-full bg-sky-400" style="width: {{ $armourPercent }}%"></div>
+                                <div class="mt-2 h-2 rounded-full border border-white/10">
+                                    <div class="h-2 rounded-full bg-gradient-to-r from-sky-300 via-sky-400 to-sky-500" style="width: {{ $armourPercent }}%"></div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="p-6 xl:col-span-8 xl:p-8">
-                        <div class="grid grid-cols-2 gap-3 lg:grid-cols-3">
-                            @foreach($overviewStats as $stat)
-                                <div class="rounded-2xl border border-white/5 bg-[#1B1C20] px-4 py-4">
-                                    <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">{{ $stat['label'] }}</p>
-                                    <p class="mt-2 text-xl font-semibold text-gray-100">{{ $stat['value'] }}</p>
-                                </div>
-                            @endforeach
+                        <div class="mt-6">
+                            <img
+                                src="{{ asset('assets/skins/'.$character->player_skinid.'.png') }}"
+                                alt="Aperçu du personnage"
+                                class="mx-auto aspect-[4/5] w-full max-w-[280px] object-contain drop-shadow-[0_36px_60px_rgba(0,0,0,0.55)]"
+                            >
                         </div>
 
-                        <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
-                            <section class="overflow-hidden rounded-2xl border border-white/5 bg-[#1B1C20]">
-                                <div class="border-b border-white/5 px-5 py-4">
-                                    <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Profil</p>
-                                    <h2 class="mt-1 text-base font-semibold text-gray-100">Informations générales</h2>
-                                </div>
-                                <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2">
-                                    @foreach($profileDetails as $detail)
-                                        <div class="bg-[#1B1C20] px-5 py-4">
-                                            <p class="text-[11px] uppercase tracking-[0.2em] text-gray-500">{{ $detail['label'] }}</p>
-                                            <p class="mt-2 text-sm text-gray-200">{{ $detail['value'] }}</p>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </section>
-
-                            <section class="overflow-hidden rounded-2xl border border-white/5 bg-[#1B1C20]">
-                                <div class="border-b border-white/5 px-5 py-4">
-                                    <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Apparence</p>
-                                    <h2 class="mt-1 text-base font-semibold text-gray-100">Attributs physiques</h2>
-                                </div>
-                                <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2">
-                                    @foreach($appearanceDetails as $detail)
-                                        <div class="bg-[#1B1C20] px-5 py-4">
-                                            <p class="text-[11px] uppercase tracking-[0.2em] text-gray-500">{{ $detail['label'] }}</p>
-                                            <p class="mt-2 text-sm text-gray-200">{{ $detail['value'] }}</p>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </section>
-
-                            <section class="overflow-hidden rounded-2xl border border-white/5 bg-[#1B1C20]">
-                                <div class="border-b border-white/5 px-5 py-4">
-                                    <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Faction</p>
-                                    <h2 class="mt-1 text-base font-semibold text-gray-100">Affiliation</h2>
-                                </div>
-                                <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2">
-                                    @foreach($factionDetails as $detail)
-                                        <div class="bg-[#1B1C20] px-5 py-4">
-                                            <p class="text-[11px] uppercase tracking-[0.2em] text-gray-500">{{ $detail['label'] }}</p>
-                                            <p class="mt-2 text-sm text-gray-200">{{ $detail['value'] }}</p>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </section>
-
-                            <section class="overflow-hidden rounded-2xl border border-white/5 bg-[#1B1C20]">
-                                <div class="border-b border-white/5 px-5 py-4">
-                                    <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Argent</p>
-                                    <h2 class="mt-1 text-base font-semibold text-gray-100">Finances</h2>
-                                </div>
-                                <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2">
-                                    @foreach($financeDetails as $detail)
-                                        <div class="bg-[#1B1C20] px-5 py-4">
-                                            <p class="text-[11px] uppercase tracking-[0.2em] text-gray-500">{{ $detail['label'] }}</p>
-                                            <p class="mt-2 text-sm text-gray-200">{{ $detail['value'] }}</p>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </section>
+                        <div class="mt-5 rounded-[1.5rem] border border-white/10 px-4 py-4">
+                            <p class="text-[11px] uppercase tracking-[0.22em] text-slate-500">Vestiaire</p>
+                            <p class="mt-3 text-lg font-semibold text-white">{{ $wardrobeCount }} tenues</p>
+                            <p class="mt-1 text-xs text-slate-400">{{ $skinCount }} skins sauvegardés · {{ $propCount }} props</p>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            @if($this->cleanText($character->player_attribute_desc, '') !== '')
-                <section class="rounded-2xl border border-stroke-primary bg-[#232429] px-5 py-5">
-                    <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Description</p>
-                    <div class="mt-3 text-sm leading-6 text-gray-300">
-                        {!! nl2br(e($this->cleanText($character->player_attribute_desc))) !!}
-                    </div>
-                </section>
-            @endif
-
-            <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
-                <section class="overflow-hidden rounded-2xl border border-stroke-primary bg-[#232429]">
-                    <div class="border-b border-white/5 px-5 py-4">
-                        <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Téléphone</p>
-                        <h2 class="mt-1 text-base font-semibold text-gray-100">Communication</h2>
-                    </div>
-                    <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2">
-                        @foreach($communicationDetails as $detail)
-                            <div class="bg-[#1B1C20] px-5 py-4">
-                                <p class="text-[11px] uppercase tracking-[0.2em] text-gray-500">{{ $detail['label'] }}</p>
-                                <p class="mt-2 text-sm text-gray-200">{{ $detail['value'] }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                </section>
-
-                <section class="overflow-hidden rounded-2xl border border-stroke-primary bg-[#232429]">
-                    <div class="border-b border-white/5 px-5 py-4">
-                        <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Équipement</p>
-                        <h2 class="mt-1 text-base font-semibold text-gray-100">Objets et permis</h2>
-                    </div>
-                    <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2">
-                        @foreach($equipmentDetails as $detail)
-                            <div class="bg-[#1B1C20] px-5 py-4">
-                                <p class="text-[11px] uppercase tracking-[0.2em] text-gray-500">{{ $detail['label'] }}</p>
-                                <p class="mt-2 text-sm text-gray-200">{{ $detail['value'] }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                </section>
-
-                <section class="overflow-hidden rounded-2xl border border-stroke-primary bg-[#232429]">
-                    <div class="border-b border-white/5 px-5 py-4">
-                        <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Fitness</p>
-                        <h2 class="mt-1 text-base font-semibold text-gray-100">Physique et combat</h2>
-                    </div>
-                    <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2">
-                        @foreach($fitnessDetails as $detail)
-                            <div class="bg-[#1B1C20] px-5 py-4">
-                                <p class="text-[11px] uppercase tracking-[0.2em] text-gray-500">{{ $detail['label'] }}</p>
-                                <p class="mt-2 text-sm text-gray-200">{{ $detail['value'] }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                </section>
-
-                <section class="overflow-hidden rounded-2xl border border-stroke-primary bg-[#232429]">
-                    <div class="border-b border-white/5 px-5 py-4">
-                        <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Maîtrise</p>
-                        <h2 class="mt-1 text-base font-semibold text-gray-100">Compétences d'armes</h2>
-                    </div>
-                    <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2">
-                        @foreach($weaponSkills as $skill)
-                            <div class="bg-[#1B1C20] px-5 py-4">
-                                <p class="text-[11px] uppercase tracking-[0.2em] text-gray-500">{{ $skill['label'] }}</p>
-                                <p class="mt-2 text-sm text-gray-200">{{ number_format((int) $skill['value'], 0, ',', ' ') }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                </section>
+                </aside>
             </div>
+        </section>
 
-            <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
-                <section class="overflow-hidden rounded-2xl border border-stroke-primary bg-[#232429]">
-                    <div class="flex items-center justify-between border-b border-white/5 px-5 py-4">
-                        <div>
-                            <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Véhicules</p>
-                            <h2 class="mt-1 text-base font-semibold text-gray-100">Possessions routières</h2>
-                        </div>
-                        <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-gray-300">{{ $vehicles->count() }}</span>
-                    </div>
-                    <div class="divide-y divide-white/5">
-                        @forelse($vehicles as $vehicle)
-                            <div class="flex items-start justify-between gap-4 px-5 py-4">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-100">{{ $vehicle->vehicle_license }}</p>
-                                    <p class="mt-1 text-sm text-gray-400">Modèle #{{ $vehicle->vehicle_modelid }} · ID #{{ $vehicle->vehicle_sqlid }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm text-gray-200">{{ number_format((int) $vehicle->vehicle_mileage, 0, ',', ' ') }} km</p>
-                                    <p class="mt-1 text-xs text-gray-500">Santé {{ number_format((float) $vehicle->vehicle_health, 0, ',', ' ') }}/1000 · Carburant {{ $this->clampPercentage($vehicle->vehicle_fuel) }}%</p>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="px-5 py-8 text-sm text-gray-400">
-                                Ce personnage ne possède aucun véhicule.
-                            </div>
-                        @endforelse
-                    </div>
-                </section>
-
-                <section class="overflow-hidden rounded-2xl border border-stroke-primary bg-[#232429]">
-                    <div class="flex items-center justify-between border-b border-white/5 px-5 py-4">
-                        <div>
-                            <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Propriétés</p>
-                            <h2 class="mt-1 text-base font-semibold text-gray-100">Biens et locations</h2>
-                        </div>
-                        <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-gray-300">{{ $ownedProperties->count() + ($rentedProperty ? 1 : 0) }}</span>
-                    </div>
-
-                    @if($rentedProperty)
-                        <div class="border-b border-white/5 px-5 py-4">
-                            <p class="text-[11px] uppercase tracking-[0.2em] text-gray-500">Location actuelle</p>
-                            <div class="mt-2 flex items-start justify-between gap-4">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-100">{{ $rentedProperty->property_name }}</p>
-                                    <p class="mt-1 text-sm text-gray-400">ID #{{ $rentedProperty->property_id }} · {{ $this->propertyTypeLabel($rentedProperty->property_type) }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm text-gray-200">{{ $this->formatMoney($rentedProperty->property_rent) }}/cycle</p>
-                                    <p class="mt-1 text-xs text-gray-500">{{ $rentedProperty->property_locked ? 'Verrouillée' : 'Déverrouillée' }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    <div class="divide-y divide-white/5">
-                        @forelse($ownedProperties as $property)
-                            <div class="flex items-start justify-between gap-4 px-5 py-4">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-100">{{ $property->property_name }}</p>
-                                    <p class="mt-1 text-sm text-gray-400">ID #{{ $property->property_id }} · {{ $this->propertyTypeLabel($property->property_type) }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm text-gray-200">{{ $this->formatMoney($property->property_price) }}</p>
-                                    <p class="mt-1 text-xs text-gray-500">{{ $property->property_locked ? 'Verrouillée' : 'Déverrouillée' }}</p>
-                                </div>
-                            </div>
-                        @empty
-                            @if(!$rentedProperty)
-                                <div class="px-5 py-8 text-sm text-gray-400">
-                                    Ce personnage ne possède ni ne loue aucune propriété.
-                                </div>
-                            @endif
-                        @endforelse
-                    </div>
-                </section>
-
-                <section class="overflow-hidden rounded-2xl border border-stroke-primary bg-[#232429]">
-                    <div class="flex items-center justify-between border-b border-white/5 px-5 py-4">
-                        <div>
-                            <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Armes</p>
-                            <h2 class="mt-1 text-base font-semibold text-gray-100">Inventaire enregistré</h2>
-                        </div>
-                        <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-gray-300">{{ $weapons->count() }}</span>
-                    </div>
-                    <div class="divide-y divide-white/5">
-                        @forelse($weapons as $weapon)
-                            <div class="flex items-start justify-between gap-4 px-5 py-4">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-100">{{ $weapon['label'] }}</p>
-                                    <p class="mt-1 text-sm text-gray-400">ID #{{ $weapon['id'] }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm text-gray-200">{{ $weapon['ammo'] }}</p>
-                                    <p class="mt-1 text-xs text-gray-500">Munitions</p>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="px-5 py-8 text-sm text-gray-400">
-                                Aucune arme enregistrée pour ce personnage.
-                            </div>
-                        @endforelse
-                    </div>
-                </section>
-
-                <section class="overflow-hidden rounded-2xl border border-stroke-primary bg-[#232429]">
-                    <div class="flex items-center justify-between border-b border-white/5 px-5 py-4">
-                        <div>
-                            <p class="text-[11px] uppercase tracking-[0.24em] text-gray-500">Drogues</p>
-                            <h2 class="mt-1 text-base font-semibold text-gray-100">Sur le personnage</h2>
-                        </div>
-                        <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-gray-300">{{ $drugs->count() }}</span>
-                    </div>
-                    <div class="divide-y divide-white/5">
-                        @forelse($drugs as $drug)
-                            <div class="flex items-start justify-between gap-4 px-5 py-4">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-100">{{ $drug['label'] }}</p>
-                                    <p class="mt-1 text-sm text-gray-400">Paquet #{{ $drug['package'] }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm text-gray-200">{{ $drug['grams'] }} g</p>
-                                    <p class="mt-1 text-xs text-gray-500">Quantité</p>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="px-5 py-8 text-sm text-gray-400">
-                                Aucune drogue enregistrée sur ce personnage.
-                            </div>
-                        @endforelse
-                    </div>
-                </section>
-            </div>
-        </div>
     </div>
 </div>
