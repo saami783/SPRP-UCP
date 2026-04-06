@@ -1,100 +1,162 @@
 <?php
 
+use App\Models\User;
+use Carbon\Carbon;
 use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
-use App\Models\User;
+use Livewire\WithPagination;
 
 new
 #[Layout('layouts.app')]
 #[Title('Dossier administratif')]
 class extends Component {
+    use WithPagination;
 
-    public $adminRecords;
-    public $activeRecords;
-
-    // TODO: ban checking!!!!!!!!!
-
-    public function getActiveRecords()
+    public function with(): array
     {
-        $characters = auth()->user()->characters;
-        $activeRecords = [];
-
-        foreach ($characters as $character) {
-            if ($character->player_ajail_time > 0) {
-                $activeRecords[] = [$character->player_oajail_reason, $character->player_oajail_admin, $character->player_ajail_time];
-            }
-        }
-
-        $this->adminRecords = $this->getAdminRecordsProcessed();
-
-        foreach ($this->adminRecords as $adminRecord) {
-            foreach ($activeRecords as $record) {
-                if($record[0] == $adminRecord->record_reason && $record[1] == $adminRecord->record_admin && $record[2] <= $adminRecord->record_time) {
-                    $adminRecord->active = true;
-                } else {
-                    $adminRecord->active = false;
-                }
-            }
-        }
-
-        return $activeRecords;
+        return [
+            'records' => $this->records(),
+        ];
     }
 
-    public function getAdminRecordsProcessed()
+    public function records()
     {
-        $adminRecords = auth()->user()->adminRecords;
+        $records = auth()->user()
+            ->adminRecords()
+            ->orderByDesc('record_id')
+            ->paginate(10);
 
-        foreach ($adminRecords as $record) {
-            $record->record_admin = User::find($record->record_admin)->account_name ?? 'Inconnu';
-            $record->record_date = Carbon\Carbon::createFromFormat('d/m/Y, H:i', $record->record_date);
-            $record->record_human_date = $record->record_date->shortRelativeDiffForHumans();
-        }
+        $adminNames = User::query()
+            ->whereIn('account_id', $records->getCollection()->pluck('record_admin')->filter()->unique()->all())
+            ->pluck('account_name', 'account_id');
 
-        return $adminRecords;
+        $records->getCollection()->transform(function ($record) use ($adminNames) {
+            $record->type_label = $this->recordTypeLabel($record->record_type);
+            $record->admin_name = $adminNames[$record->record_admin] ?? 'Inconnu';
+            $record->formatted_time = $this->formatRecordTime($record->record_time);
+            $record->formatted_date = $this->formatRecordDate($record->record_date);
+
+            return $record;
+        });
+
+        return $records;
     }
 
-    public function mount()
+    public function recordTypeLabel($type): string
     {
-        $this->activeRecords = $this->getActiveRecords();
+        return match ((int) $type) {
+            0 => 'Expulsion',
+            1 => 'Prison admin',
+            2 => 'Bannissement',
+            default => 'Inconnu',
+        };
+    }
+
+    public function formatRecordTime($time): string
+    {
+        $minutes = (int) $time;
+
+        return $minutes > 0 ? $minutes.' min' : '-';
+    }
+
+    public function formatRecordDate($date): string
+    {
+        if ($date instanceof Carbon) {
+            return $date->format('d/m/Y H:i');
+        }
+
+        try {
+            return Carbon::createFromFormat('d/m/Y, H:i', (string) $date)->format('d/m/Y H:i');
+        } catch (\Throwable $e) {
+            try {
+                return Carbon::parse((string) $date)->format('d/m/Y H:i');
+            } catch (\Throwable $e) {
+                return (string) $date;
+            }
+        }
     }
 
 }; ?>
 
-<div>
-    <div class="w-full inline-flex items-start justify-center p-6 space-x-4">
-        <a href="{{ url()->previous() }}" class="h-10 w-10 hidden md:block rounded-full bg-[#2D2F34] p-2 text-gray-500 hover:text-gray-400 transition">
-            <x-heroicon-c-arrow-left-circle class="w-6 h-6" />
-        </a>
-        <div class="w-full md:w-2/3 lg:w-1/2 space-y-3">
-            <h1 class="text-2xl font-bold text-gray-200">{{ __('Your Admin Record') }}</h1>
-            <div class="text-gray-400 inline-flex items-center">
-                <div class="inline-flex items-center mr-1 space-x-1">
-                    <x-heroicon-m-user class="w-5 h-5" />
-                    <span>{{Auth::user()->account_name}}</span>
-                </div>· ID {{Auth::user()->account_id}}
-            </div>
-            <div>
-                <div class="space-y-2 mb-6">
-                    @if(count($activeRecords) > 0)
-                        <p class="text-[#F79046] font-semibold">Vous avez actuellement des sanctions actives.</p>
-                    @endif
-                    @foreach($adminRecords as $record)
-                       @if($record->active)
-                                <x-admin-record-entry :record_active="true" :record_type="$record->record_type" :record_time="$record->record_time" :record_human_date="$record->record_human_date" :record_date="$record->record_date" :record_admin="$record->record_admin" :record_reason="$record->record_reason" />
-                            @endif
-                    @endforeach
-                </div>
+<div class="px-4 py-5 md:px-6 md:py-8 xl:px-8">
+    <div class="mx-auto max-w-6xl space-y-6">
+        <div class="flex flex-wrap items-center gap-4">
+            <a
+                href="{{ route('dashboard') }}"
+                class="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white transition hover:border-white/20"
+                wire:navigate
+            >
+                <x-heroicon-c-arrow-left-circle class="h-5 w-5" />
+                <span>Retour</span>
+            </a>
+        </div>
+
+        <section class="p-6">
+            <div class="flex flex-wrap items-end gap-4">
                 <div>
-                    <p class="text-gray-500 font-medium mb-2">Sanctions précédentes <span class="text-gray-400">· {{count($adminRecords) - count($activeRecords) }}</span></p>
-                    <div class="space-y-2">
-                        @foreach($adminRecords as $record)
-                            @if(!$record->active)
-                                <x-admin-record-entry :record_active="false" :record_type="$record->record_type" :record_time="$record->record_time" :record_human_date="$record->record_human_date" :record_date="$record->record_date" :record_admin="$record->record_admin" :record_reason="$record->record_reason" />
-                            @endif
-                        @endforeach
+                    <h1 class="font-manrope text-3xl font-extrabold tracking-tight text-white">Historique des sanctions</h1>
+                </div>
+            </div>
+
+            <div class="mt-6 overflow-hidden border border-white/10">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-white/10 text-sm">
+                        <thead class="bg-white/5">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-medium uppercase tracking-[0.18em] text-white">Type</th>
+                                <th class="px-4 py-3 text-left font-medium uppercase tracking-[0.18em] text-white">Admin</th>
+                                <th class="px-4 py-3 text-left font-medium uppercase tracking-[0.18em] text-white">Raison</th>
+                                <th class="px-4 py-3 text-left font-medium uppercase tracking-[0.18em] text-white">Temps</th>
+                                <th class="px-4 py-3 text-left font-medium uppercase tracking-[0.18em] text-white">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/10">
+                            @forelse($records as $record)
+                                <tr class="align-top">
+                                    <td class="whitespace-nowrap px-4 py-4 font-medium text-white">{{ $record->type_label }}</td>
+                                    <td class="whitespace-nowrap px-4 py-4 text-white">{{ $record->admin_name }}</td>
+                                    <td class="min-w-[320px] px-4 py-4 text-white">{{ $record->record_reason ?: '-' }}</td>
+                                    <td class="whitespace-nowrap px-4 py-4 text-white">{{ $record->formatted_time }}</td>
+                                    <td class="whitespace-nowrap px-4 py-4 text-white">{{ $record->formatted_date }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-4 py-10 text-center text-white">
+                                        Aucun dossier administratif enregistré.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            @if($records->hasPages())
+                <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+                    <p class="text-sm text-white">
+                        Page {{ $records->currentPage() }} sur {{ $records->lastPage() }}
+                    </p>
+
+                    <div class="inline-flex items-center gap-2">
+                        <button
+                            type="button"
+                            wire:click="previousPage"
+                            @disabled($records->onFirstPage())
+                            class="rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white transition hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                            Précédent
+                        </button>
+                        <button
+                            type="button"
+                            wire:click="nextPage"
+                            @disabled(!$records->hasMorePages())
+                            class="rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white transition hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                            Suivant
+                        </button>
                     </div>
                 </div>
-            </div>
-        </div>
+            @endif
+        </section>
     </div>
 </div>

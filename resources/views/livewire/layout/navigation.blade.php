@@ -86,10 +86,11 @@ new class extends Component
             <x-heroicon-m-scale class="h-6 w-6" />
             <span>{{ __('Admin Record') }}</span>
         </x-nav-link>
-        <x-nav-link :href="route('connections')" :active="request()->is('help') || request()->routeIs('help/*')" wire:navigate>
-            <x-heroicon-m-ticket class="h-6 w-6" />
-            <span>{{ __('Help') }}</span>
+        <x-nav-link :href="route('account')" :active="request()->is('account') || request()->routeIs('account/*')" wire:navigate>
+            <x-heroicon-m-user-circle class="h-6 w-6" />
+            <span>{{ __('Compte') }}</span>
         </x-nav-link>
+        {{--
         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('marketplace/*')" wire:navigate>
             <x-heroicon-m-banknotes class="h-6 w-6" />
             <span>{{ __('Marketplace') }}</span>
@@ -98,6 +99,7 @@ new class extends Component
             <x-heroicon-m-star class="h-6 w-6" />
             <span>{{ __('Premium') }}</span>
         </x-nav-link>
+        --}}
         <!-- Settings Dropdown -->
         <div class="hidden lg:flex sm:items-center sm:ms-6">
             <x-dropdown align="right" width="48">
@@ -109,17 +111,21 @@ new class extends Component
 
                 <x-slot name="content">
                     <x-dropdown-link :href="route('account')" wire:navigate>
-                        {{ __('Account') }}
+                        {{ __('Compte') }}
                     </x-dropdown-link>
+                    {{--
                     <x-dropdown-link :href="route('connections')" wire:navigate>
                         {{ __('Connections') }}
                     </x-dropdown-link>
-                    <x-dropdown-link :href="route('map')">
+                    --}}
+                    <x-dropdown-link :href="route('map')" target="_blank" rel="noopener noreferrer">
                         {{ __('Map') }}
                     </x-dropdown-link>
+                    {{--
                     <x-dropdown-link :href="route('updates')" wire:navigate>
                         {{ __('Updates') }}
                     </x-dropdown-link>
+                    --}}
                 </x-slot>
             </x-dropdown>
         </div>
@@ -140,10 +146,11 @@ new class extends Component
                 <x-heroicon-m-scale class="h-6 w-6" />
                 <span>{{ __('Admin Record') }}</span>
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('connections')" :active="request()->is('help') || request()->routeIs('help/*')" wire:navigate>
-                <x-heroicon-m-ticket class="h-6 w-6" />
-                <span>{{ __('Help') }}</span>
+            <x-responsive-nav-link :href="route('account')" :active="request()->is('account') || request()->routeIs('account/*')" wire:navigate>
+                <x-heroicon-m-user-circle class="h-6 w-6" />
+                <span>{{ __('Compte') }}</span>
             </x-responsive-nav-link>
+            {{--
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('marketplace/*')" wire:navigate>
                 <x-heroicon-m-banknotes class="h-6 w-6" />
                 <span>{{ __('Marketplace') }}</span>
@@ -152,6 +159,7 @@ new class extends Component
                 <x-heroicon-m-star class="h-6 w-6" />
                 <span>{{ __('Premium') }}</span>
             </x-responsive-nav-link>
+            --}}
         </div>
 
         <!-- Responsive Settings Options -->
@@ -163,17 +171,21 @@ new class extends Component
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('account')" wire:navigate>
-                    {{ __('Account') }}
+                    {{ __('Compte') }}
                 </x-responsive-nav-link>
+                {{--
                 <x-responsive-nav-link :href="route('connections')" wire:navigate>
                     {{ __('Connections') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('map')" wire:navigate>
+                --}}
+                <x-responsive-nav-link :href="route('map')" target="_blank" rel="noopener noreferrer">
                     {{ __('Map') }}
                 </x-responsive-nav-link>
+                {{--
                 <x-responsive-nav-link :href="route('updates')" wire:navigate>
                     {{ __('Updates') }}
                 </x-responsive-nav-link>
+                --}}
 
                 <!-- Authentication -->
                 <button wire:click="logout" class="w-full text-start">
